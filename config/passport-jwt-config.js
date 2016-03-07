@@ -10,7 +10,7 @@ module.exports = function() {
     opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
     opts.secretOrKey = 'secret';
     passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
-        User.where('id', jwt_payload.id).fetch()
+        User.where('id', jwt_payload.id).fetch({withRelated: 'roles'})
             .then(user => user ? done(null, user) : done(null, false))
             .catch(err => done(err, false));
     }));

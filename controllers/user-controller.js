@@ -13,7 +13,7 @@ router.get('/', function(req, res) {
     });
 });
 
-router.get('/securedArea', jwtAuth, authorizedRoles('Rob', 'Someone Else'), function(req, res) {
+router.get('/securedArea', jwtAuth, authorizedRoles('ROLE_ADMIN'), function(req, res) {
     res.json({msg: "You made it to the secure area"});
 });
 

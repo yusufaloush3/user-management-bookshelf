@@ -3,9 +3,13 @@
 const bookshelf = require('../bookshelf-instance');
 const Promise = require('bluebird');
 const bcrypt = Promise.promisifyAll(require('bcrypt'));
+const Role = require('./role');
 
 module.exports = bookshelf.Model.extend({
     tableName: 'user',
+    roles() {
+        return this.belongsToMany(Role, 'user_role');
+    },
     validPassword(password) {
         return bcrypt.compareAsync(password, this.attributes.password);
     },
