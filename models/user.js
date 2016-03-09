@@ -1,9 +1,10 @@
 'use strict';
 
-const bookshelf = require('../bookshelf-instance');
+const bookshelf = require('../config/bookshelf-instance');
 const Promise = require('bluebird');
 const bcrypt = Promise.promisifyAll(require('bcrypt'));
 const Role = require('./role');
+const securityConfig = require('../config/security-config');
 
 module.exports = bookshelf.Model.extend({
     tableName: 'user',
@@ -18,7 +19,7 @@ module.exports = bookshelf.Model.extend({
             if (!model.hasChanged('password')) return;
 
             return Promise.coroutine(function* () {
-                const salt = yield bcrypt.genSaltAsync(10);
+                const salt = yield bcrypt.genSaltAsync(securityConfig.saltRounds);
                 const hashedPassword = yield bcrypt.hashAsync(model.attributes.password, salt);
                 model.set('password', hashedPassword);
             })();
